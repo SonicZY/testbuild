@@ -618,7 +618,7 @@ int main(int argc, char* argv[]) {
                             }
                         
 
-                        std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(13));
+                        std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(10));
                     }
                 }
                 else {
