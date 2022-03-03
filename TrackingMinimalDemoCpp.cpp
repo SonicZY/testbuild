@@ -32,7 +32,7 @@ using namespace std;
 
 #include <thread>
 #include <chrono>
-
+// to do list : NFC function( auto ip address )\ command ack
 
 
 #if defined(__linux__)
