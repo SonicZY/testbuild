@@ -247,18 +247,10 @@ int main(int argc, char* argv[]) {
     // Get placement serialized data.
    // const std::string placementData = argv[2];
 
-    //const std::string environmentData = "AAVSaWdpZIQDAQZ5ZWxsb3ckFbhTiT_cRqA-r45jvZqZmT4AAAAAAAAAAACamRk_dAkLAxMDARwKAB4HARAMAwkDARcIAAUKABkMARYQAAMHAREQABsAAhwCAxoUAiALABkGAx0QABUEAw0IAyAQAAQUACMIAxYAABAUAAsOAgkHAwoRAw0QARIPAg4AAgwLAiEOAxMHAQQJAA8BABYUAhUPAgsPACMSASMOAQQAAAACAw8OABcSABESAgIEAhILAA8HAAQSAx8DAAcCAxQKAhgCAyMMAw4KAiEAABkCAwcMAhQTAhwIAxwNAiMCAwcRACEUAAMOAxMAAgsFAAYDARsQAxUGAAILAQMDAhgOAwMRAQ4EAQgOAhYMARoFAQ0DAx8OAxoKAwQOARkRAwsTACAIARIDAx4MAwEAAA4UAhQNAwcFASARAgcUAAEUAB0SAiMEAR0EAgYQAhgJAgAGAR0UAAsJACIIAQ0MAB8FAAgIAh8AAhAFAxEJAgASAQgAAAAOAQUHAwALAwsBAQ";
-   // const std::string environmentData = "AAVSaWdpZBcABnllbGxvdwQEBAABAQMBAQEDAAEAAD_W";
      const std::string environmentData = "AAVSaWdpZMoDAQZ5ZWxsb3ckFbhTiT_cRqA-r45jvZqZmT4AAAAAAAAAAACamRk_iwEeDQMGFAAKFAAOFAASFAADFAIZFAAdFAAhFAAjEQEbBgIjCQEjBQEdAAIDAQICAAIJAAAHBAINAAIRAAIZAwIZAAIgAAAhBwMABgEeCgIADgEAEgEWFAIHEwAEEwIREwAXEwAbEwAfEwAMEwIJEgALEAENEQEQEgAFEgIZEQEWEgIfEgAcEgIiEgMCEAEIEAEEDwEEAgIAAwMCBAEaCwMCBwEGDQIACwMeAQIBDAMDDQIBCAMKBwMEBAEBBAMGAAIHAQAKAQAHAgIJAwMKBAAFCwIOAQEBEQMeAgIIDAMgAwAfBQAGBgIjAgMbAwMPBQIXAgIYBQAVAAIVAQASAQAiCAMWBQEUAwMUBwEVCgARCwMTDgIODQMQDQEGEAMHCAIECAMIBwMHCgIDCgIRBgMcEAIJDgEMBgAMCAAKCgMMAwMUBQIPBwASCAENCgIKDQMMDQEODwEQAgEgEAAeEAEcDgAaDgMgDAAhCwAgCgAiDgMcCwEcCAAfBwEdBQMZCAATDAMYCwMVDQMXCAIXDQEYDwEVEAAREAITEAEPCgMjDgOfQA";
     
-    //const std::string environmentData = "AntilatencyAltEnvironmentHorizontalGrid~AgZ5ZWxsb3cEBLhTiT_cRqA-r45jvZqZmT4AAAAAAAAAAACamRk_AQQAAQEBAwABAAADAQE";
-    //const std::string placementData = "AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA"; 
       const std::string placementData = "AAAAAAAK1yO8BoGVPcK4sj0AAAAAAAAAAGY0";
-      //const std::string placementData_gun = "AAAAAAAAAAAAAAAAANsPyT8AAAAA2w9JQA";
-      const std::string placementData_gun = "AAAAAADNzMw9m15wPsFX4D8AAAAA2w9JQA";//AAAAAADNzMw9AAAAANsPyT8AAAAA2w9JQA
-      //AAAAAADNzMw9AAAAANsPyT8AAAAA2w9JQA AAAAAADNzMw9m15wPsFX4D8AAAAA2w9JQA
-      //const std::string placementData = "AAAAAAAK1yO8BoGVPcK4sj3bD8k_AAAAAA";
-//AAAAAADNzMw9-3waPtsPyT8AAAAA2w9JQA AAAAAADNzMw91rRTPtsPyT8AAAAA2w9JQA
+      const std::string placementData_gun = "AAAAAADNzMw9m15wPsFX4D8AAAAA2w9JQA";
     // Create environment object from the serialized data.
     const Antilatency::Alt::Environment::IEnvironment environment = environmentSelectorLibrary.createEnvironment(environmentData);
     if (environment == nullptr) {
@@ -280,60 +272,8 @@ int main(int argc, char* argv[]) {
     // Each time the device network is changed due to connection or disconnection of a device that matches the device filter of the network,
     // or start or stop of a task on any network device, the network update id is incremented by 1. 
     uint32_t prevUpdateId = 0;
-    ////===================================================================
-    //while(1)
-    //{
-        
-        //json sendMessage;
-        //auto pinState_Trigger = digitalRead(pin_Trigger);
-        //auto pinState_Switch = digitalRead(pin_Switch);
-        //auto pinState_Reload = digitalRead(pin_Reload);
-        //auto pinState_F1 = digitalRead(pin_F1);
-        //auto pinState_F2 = digitalRead(pin_F2);
-        
-        
-        //sendMessage["Pin"]["T"] = (pinState_Trigger == 0)?"ON":"OFF";
-        //sendMessage["Pin"]["S"] = (pinState_Switch == 0)? "ON":"OFF";
-        //sendMessage["Pin"]["R"] = (pinState_Reload == 0)? "ON":"OFF";
-        //sendMessage["Pin"]["F1"] = (pinState_F1 == 0)? "ON":"OFF";
-        //sendMessage["Pin"]["F2"] = (pinState_F2 == 0)? "ON":"OFF";
-       //// if((pinState_Trigger == 0)||(pinState_Reload == 0)){
-            
-            //std::string message_str = sendMessage.dump();
-        
-            //strcpy(buf, message_str.c_str()); 
-
-            //std::cout << message_str << std::endl;
-          
-            //if ((len = sendto(client_sockfd, buf, strlen(buf), 0, (struct sockaddr*)&remote_addr_gun, sizeof(struct sockaddr))) < 0)
-            //{
-                //perror("socket error when send message");
-                
-                ////return 1;
-            //}
-            
-       //// }
-        
-        
-        
-        ////std::string message_str = sendMessage.dump();
-        
-        ////strcpy(buf, message_str.c_str()); 
-
-        ////std::cout << message_str << std::endl;
-      
-        ////if ((len = sendto(client_sockfd, buf, strlen(buf), 0, (struct sockaddr*)&remote_addr_gun, sizeof(struct sockaddr))) < 0)
-        ////{
-            ////perror("socket error when send message");
-            
-            ////return 1;
-        ////}
-        
-        //std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(20));
-
-   //}
-   //======================================================================================
-  bool blink = true;
+   
+    bool blink = true;
     while (network != nullptr) {
         // Check if the network has been changed.
         std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(100));
@@ -365,40 +305,6 @@ int main(int argc, char* argv[]) {
                     while (altTrackingCotask_head != nullptr || altTrackingCotask_gun != nullptr) {
                         // Print the extrapolated state of node to the console every 500 ms (2FPS).
                         
-                     /*    //wait for tick
-                       socklen_t addr_len = sizeof(rev_addr);
-                        std::cout << "tick!!" <<std::endl;
-                         len = recvfrom(client_sockfd, buffer_recv, sizeof(buffer_recv), 0, (struct sockaddr*)&rev_addr, &addr_len);
-                        
-                       std::string Message(&buffer_recv[0],&buffer_recv[len]);
-                        
-                       float delay=atof(Message.c_str());
-                        std::cout << "Revived form client:" << delay << std::endl;
-                        if(delay==999) blink = true;
-                        if(delay == 888) blink =false;
-                        std::cout << "count:" << count << std::endl;
-                        std::cout << "blink:" << blink << std::endl;
-                         if (blink)
-                        {
-                            if(up)
-                            {
-                                count++;
-                                if(count>=100)
-                                {
-                                    up = false;
-                                }
-                                continue;
-                            }
-                            else
-                            {
-                                count--;
-                                if(count==0)
-                                {
-                                    up = true;
-                                }
-                            }
-                            //continue;
-                        }*/
                         uint32_t currentUpdateId = 0;
                        
                         if (altTrackingCotask_head != nullptr) {
@@ -462,17 +368,6 @@ int main(int argc, char* argv[]) {
                                 //std::cout << "\tLocalAngularVelocity: x:" << state.localAngularVelocity.x << ", y: " << state.localAngularVelocity.y << ", z: " << state.localAngularVelocity.z << std::endl << std::endl;
 
     #if defined(__linux__)
-    /*
-                                sendMessage["Head"]["position"]["X"] = state.pose.position.x;
-                                sendMessage["Head"]["position"]["Y"] = state.pose.position.y;
-                                sendMessage["Head"]["position"]["Z"] = state.pose.position.z;
-
-                                sendMessage["Head"]["rotation"]["X"] = state.pose.rotation.x;
-                                sendMessage["Head"]["rotation"]["Y"] = state.pose.rotation.y;
-                                sendMessage["Head"]["rotation"]["Z"] = state.pose.rotation.z;
-                                sendMessage["Head"]["rotation"]["W"] = state.pose.rotation.w;
-                                
-            */                    
                                 sendMessage["Head"]["pos"]["X"] = setPrecise5(state.pose.position.x);
                                 sendMessage["Head"]["pos"]["Y"] = setPrecise5(state.pose.position.y);
                                 sendMessage["Head"]["pos"]["Z"] = setPrecise5(state.pose.position.z);
@@ -482,29 +377,9 @@ int main(int argc, char* argv[]) {
                                 sendMessage["Head"]["rot"]["Z"] = setPrecise5(state.pose.rotation.z);
                                 sendMessage["Head"]["rot"]["W"] = setPrecise5(state.pose.rotation.w);
 
-                                
-                                //sendMessage["Head"]["velocity"]["X"] = state.velocity.x;
-                                //sendMessage["Head"]["velocity"]["Y"] = state.velocity.y;
-                                //sendMessage["Head"]["velocity"]["Z"] = state.velocity.z;
-
-                                //sendMessage["Head"]["localAngularVelocity"]["X"] = state.localAngularVelocity.x;
-                                //sendMessage["Head"]["localAngularVelocity"]["Y"] = state.localAngularVelocity.y;
-                                //sendMessage["Head"]["localAngularVelocity"]["Z"] = state.localAngularVelocity.z;
-
                                 sendMessage["Head"]["sta"]["stage"] = static_cast<int32_t>(state.stability.stage);
                                 sendMessage["Head"]["sta"]["Val"] = state.stability.value;
 
-                                
-                                //std::string message_str = sendMessage.dump();
-                                //strcpy(buf, message_str.c_str()); 
-
-                                //std::cout << message_str << std::endl;
-                                //if ((len = sendto(client_sockfd, buf, strlen(buf), 0, (struct sockaddr*)&remote_addr, sizeof(struct sockaddr))) < 0)
-                                //{
-                                    //perror("socket error when send message");
-                                    
-                                    //return 1;
-                                //}
     #endif
                                 blink = false;
                             }
@@ -555,32 +430,14 @@ int main(int argc, char* argv[]) {
                             auto pinState_Reload = digitalRead(pin_Reload);
                             auto pinState_F1 = digitalRead(pin_F1);
                             auto pinState_F2 = digitalRead(pin_F2);
-                            /*
-                            sendMessage["Gun"]["position"]["X"] = state.pose.position.x;
-                            sendMessage["Gun"]["position"]["Y"] = state.pose.position.y;
-                            sendMessage["Gun"]["position"]["Z"] = state.pose.position.z;
+                            sendMessage["Gun"]["pos"]["X"] = setPrecise5(state.pose.position.x);
+                            sendMessage["Gun"]["pos"]["Y"] = setPrecise5(state.pose.position.y);
+                            sendMessage["Gun"]["pos"]["Z"] = setPrecise5(state.pose.position.z);
 
-                            sendMessage["Gun"]["rotation"]["X"] = state.pose.rotation.x;
-                            sendMessage["Gun"]["rotation"]["Y"] = state.pose.rotation.y;
-                            sendMessage["Gun"]["rotation"]["Z"] = state.pose.rotation.z;
-                            sendMessage["Gun"]["rotation"]["W"] = state.pose.rotation.w;
-*/
-						sendMessage["Gun"]["pos"]["X"] = setPrecise5(state.pose.position.x);
-						sendMessage["Gun"]["pos"]["Y"] = setPrecise5(state.pose.position.y);
-						sendMessage["Gun"]["pos"]["Z"] = setPrecise5(state.pose.position.z);
-
-						sendMessage["Gun"]["rot"]["X"] = setPrecise5(state.pose.rotation.x);
-						sendMessage["Gun"]["rot"]["Y"] = setPrecise5(state.pose.rotation.y);
-						sendMessage["Gun"]["rot"]["Z"] = setPrecise5(state.pose.rotation.z);
-						sendMessage["Gun"]["rot"]["W"] = setPrecise5(state.pose.rotation.w);
-                            
-                            //sendMessage_gun["Gun"]["velocity"]["X"] = state.velocity.x;
-                            //sendMessage_gun["Gun"]["velocity"]["Y"] = state.velocity.y;
-                            //sendMessage_gun["Gun"]["velocity"]["Z"] = state.velocity.z;
-
-                            //sendMessage_gun["Gun"]["localAngularVelocity"]["X"] = state.localAngularVelocity.x;
-                            //sendMessage_gun["Gun"]["localAngularVelocity"]["Y"] = state.localAngularVelocity.y;
-                            //sendMessage_gun["Gun"]["localAngularVelocity"]["Z"] = state.localAngularVelocity.z;
+                            sendMessage["Gun"]["rot"]["X"] = setPrecise5(state.pose.rotation.x);
+                            sendMessage["Gun"]["rot"]["Y"] = setPrecise5(state.pose.rotation.y);
+                            sendMessage["Gun"]["rot"]["Z"] = setPrecise5(state.pose.rotation.z);
+                            sendMessage["Gun"]["rot"]["W"] = setPrecise5(state.pose.rotation.w);
 
                             sendMessage["Gun"]["sta"]["stage"] = static_cast<int32_t>(state.stability.stage);
                             sendMessage["Gun"]["sta"]["Val"] = state.stability.value;
@@ -591,17 +448,6 @@ int main(int argc, char* argv[]) {
                             sendMessage["Gun"]["Pin"]["F1"] = (pinState_F1 == 0)? "ON":"OFF";
                             sendMessage["Gun"]["Pin"]["F2"] = (pinState_F2 == 0)? "ON":"OFF";
 
-                            //std::string message_str = sendMessage_gun.dump();
-                            //strcpy(buf, message_str.c_str()); 
-
-                            //std::cout << message_str << std::endl;
-                          
-                            //if ((len = sendto(client_sockfd, buf, strlen(buf), 0, (struct sockaddr*)&remote_addr_gun, sizeof(struct sockaddr))) < 0)
-                            //{
-                                //perror("socket error when send message");
-                                
-                                //return 1;
-                            //}
 #endif
                         }
                         
