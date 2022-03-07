@@ -131,6 +131,16 @@ int main(int argc, char* argv[]) {
     std::string libNameEnvironmentSelector = "AntilatencyAltEnvironmentSelector";
 #endif
 
+
+
+json my_config;
+ my_config["hostIP"] = "192.168.1.223";
+ my_config["hostPort"] = 36369;
+
+std::ofstream ofs("config.json");
+ofs << std::setw(4)<<my_config<<std::endl;
+
+
 #if defined(__linux__)
     //json sendMessage;
     json sendMessage_gun;
