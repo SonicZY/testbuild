@@ -138,8 +138,13 @@ json my_config;
  my_config["hostPort"] = 36369;
 
 std::ofstream ofs("config.json");
-ofs << std::setw(4)<<my_config<<std::endl;
-
+if(!ofs.is_open()){
+     ste::cout<<"open file error"<<std::endl;
+}
+else
+{
+    ofs<<std::setw(4)<<my_config<<std::endl;
+}
 
 #if defined(__linux__)
     //json sendMessage;
@@ -377,7 +382,6 @@ ofs << std::setw(4)<<my_config<<std::endl;
 
                                 //std::cout << "\tLocalAngularVelocity: x:" << state.localAngularVelocity.x << ", y: " << state.localAngularVelocity.y << ", z: " << state.localAngularVelocity.z << std::endl << std::endl;
 
-    #if defined(__linux__)
                                 sendMessage["Head"]["pos"]["X"] = setPrecise5(state.pose.position.x);
                                 sendMessage["Head"]["pos"]["Y"] = setPrecise5(state.pose.position.y);
                                 sendMessage["Head"]["pos"]["Z"] = setPrecise5(state.pose.position.z);
@@ -390,7 +394,6 @@ ofs << std::setw(4)<<my_config<<std::endl;
                                 sendMessage["Head"]["sta"]["stage"] = static_cast<int32_t>(state.stability.stage);
                                 sendMessage["Head"]["sta"]["Val"] = state.stability.value;
 
-    #endif
                                 blink = false;
                             }
                             else{
