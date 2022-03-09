@@ -1,3 +1,0 @@
-/home/pi/Antilatency.TrackingMinimalDemoCpp/build/CMakeFiles/rebuild_cache.dir
-/home/pi/Antilatency.TrackingMinimalDemoCpp/build/CMakeFiles/TrackingMinimalDemo.dir
-/home/pi/Antilatency.TrackingMinimalDemoCpp/build/CMakeFiles/edit_cache.dir
