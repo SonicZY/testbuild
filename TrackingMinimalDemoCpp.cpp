@@ -116,6 +116,18 @@ static void setnonblocking(int sockfd) {
 
 int main_task(int n){
 
+#if defined(__linux__)
+    Dl_info dlinfo;
+    dladdr(reinterpret_cast<void*>(&main), &dlinfo);
+    std::string path = std::filesystem::path(dlinfo.dli_fname).parent_path();
+    std::string libNameADN = path + "/libAntilatencyDeviceNetwork.so";
+    std::string libNameTracking = path + "/libAntilatencyAltTracking.so";
+    std::string libNameEnvironmentSelector = path + "/libAntilatencyAltEnvironmentSelector.so";
+#else
+    std::string libNameADN = "AntilatencyDeviceNetwork";
+    std::string libNameTracking = "AntilatencyAltTracking";
+    std::string libNameEnvironmentSelector = "AntilatencyAltEnvironmentSelector";
+#endif
 
 
 #if defined(__linux__)
@@ -471,18 +483,6 @@ int main(int argc, char* argv[]) {
    //     std::cout << "Wrong arguments. Pass environment data string as first argument and placement data as second.";
    //     return 1;
    // }
-#if defined(__linux__)
-    Dl_info dlinfo;
-    dladdr(reinterpret_cast<void*>(&main), &dlinfo);
-    std::string path = std::filesystem::path(dlinfo.dli_fname).parent_path();
-    std::string libNameADN = path + "/libAntilatencyDeviceNetwork.so";
-    std::string libNameTracking = path + "/libAntilatencyAltTracking.so";
-    std::string libNameEnvironmentSelector = path + "/libAntilatencyAltEnvironmentSelector.so";
-#else
-    std::string libNameADN = "AntilatencyDeviceNetwork";
-    std::string libNameTracking = "AntilatencyAltTracking";
-    std::string libNameEnvironmentSelector = "AntilatencyAltEnvironmentSelector";
-#endif
 
 
 //================creat a default config.json file=====================
