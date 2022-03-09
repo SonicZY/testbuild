@@ -114,11 +114,10 @@ static void setnonblocking(int sockfd) {
     }
 }
 
-int main_task(int n){
+    Dl_info dlinfo;
+int maintask(int n){
 
 #if defined(__linux__)
-    Dl_info dlinfo;
-    dladdr(reinterpret_cast<void*>(&main), &dlinfo);
     std::string path = std::filesystem::path(dlinfo.dli_fname).parent_path();
     std::string libNameADN = path + "/libAntilatencyDeviceNetwork.so";
     std::string libNameTracking = path + "/libAntilatencyAltTracking.so";
@@ -485,6 +484,7 @@ int main(int argc, char* argv[]) {
    // }
 
 
+    dladdr(reinterpret_cast<void*>(&main), &dlinfo);
 //================creat a default config.json file=====================
 json my_config;
 
@@ -521,7 +521,7 @@ else
 //开一个udp lisenter,is config changed,save to file and reboot
 
 thread thread_command(Command_task,1);
-thread thread_main(main_task,1);
+thread thread_main(maintask,1);
 
 thread_command.join();
 thread_main.join();
