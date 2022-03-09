@@ -1,10 +1,11 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <fstream>
 
 #include <Antilatency.InterfaceContract.LibraryLoader.h>
 #include <Antilatency.DeviceNetwork.h>
-
+#include "CommandRecv.h"
 
 #if defined(__linux__)
 #include <dlfcn.h>
@@ -113,38 +114,9 @@ static void setnonblocking(int sockfd) {
     }
 }
 
-int main(int argc, char* argv[]) {
-   // if (argc != 3) {
-   //     std::cout << "Wrong arguments. Pass environment data string as first argument and placement data as second.";
-   //     return 1;
-   // }
-#if defined(__linux__)
-    Dl_info dlinfo;
-    dladdr(reinterpret_cast<void*>(&main), &dlinfo);
-    std::string path = std::filesystem::path(dlinfo.dli_fname).parent_path();
-    std::string libNameADN = path + "/libAntilatencyDeviceNetwork.so";
-    std::string libNameTracking = path + "/libAntilatencyAltTracking.so";
-    std::string libNameEnvironmentSelector = path + "/libAntilatencyAltEnvironmentSelector.so";
-#else
-    std::string libNameADN = "AntilatencyDeviceNetwork";
-    std::string libNameTracking = "AntilatencyAltTracking";
-    std::string libNameEnvironmentSelector = "AntilatencyAltEnvironmentSelector";
-#endif
+int main_task(int n){
 
 
-
-json my_config;
- my_config["hostIP"] = "192.168.1.223";
- my_config["hostPort"] = 36369;
-
-std::ofstream ofs("config.json");
-if(!ofs.is_open()){
-     ste::cout<<"open file error"<<std::endl;
-}
-else
-{
-    ofs<<std::setw(4)<<my_config<<std::endl;
-}
 
 #if defined(__linux__)
     //json sendMessage;
@@ -486,5 +458,73 @@ else
         }
     }
 
-    return 0;
+
+
+
+
+
+}
+
+
+int main(int argc, char* argv[]) {
+   // if (argc != 3) {
+   //     std::cout << "Wrong arguments. Pass environment data string as first argument and placement data as second.";
+   //     return 1;
+   // }
+#if defined(__linux__)
+    Dl_info dlinfo;
+    dladdr(reinterpret_cast<void*>(&main), &dlinfo);
+    std::string path = std::filesystem::path(dlinfo.dli_fname).parent_path();
+    std::string libNameADN = path + "/libAntilatencyDeviceNetwork.so";
+    std::string libNameTracking = path + "/libAntilatencyAltTracking.so";
+    std::string libNameEnvironmentSelector = path + "/libAntilatencyAltEnvironmentSelector.so";
+#else
+    std::string libNameADN = "AntilatencyDeviceNetwork";
+    std::string libNameTracking = "AntilatencyAltTracking";
+    std::string libNameEnvironmentSelector = "AntilatencyAltEnvironmentSelector";
+#endif
+
+
+//================creat a default config.json file=====================
+json my_config;
+
+ my_config["gun_SN"] = "001";
+
+ my_config["bind"] = "false";
+ my_config["bind"]["hostIP"] = "192.168.1.223";
+ my_config["bind"]["hostPort"] = 36369;
+ my_config["bind"]["device_name"] = "oculus1";
+ my_config["bind"]["player_name"] = "unknow";
+
+ my_config["parameter"]["Enviroment"] = "0";
+ my_config["parameter"]["Placement"] = "001";
+ my_config["parameter"]["GunRotationOffset"] = "001";
+ my_config["parameter"]["GunPositionOffset"] = "001";
+ my_config["parameter"]["SetSPS"] = "001";
+
+ my_config["Vib"] = "001";
+ my_config["VibMode"] = "001";
+ my_config["Color"] = "001";
+ my_config["BlinkMode"] = "001";
+
+
+std::ofstream ofs("config.json");
+if(!ofs.is_open()){
+     std::cout<<"open file error"<<std::endl;
+}
+else
+{
+    ofs<<std::setw(4)<<my_config<<std::endl;
+}
+
+//================================================
+//开一个udp lisenter,is config changed,save to file and reboot
+
+thread thread_command(Command_task,1);
+thread thread_main(main_task,1);
+
+thread_command.join();
+thread_main.join();
+
+return 0;
 }

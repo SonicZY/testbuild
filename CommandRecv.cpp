@@ -2,10 +2,19 @@
 
 #include <CommandRecv.h>
 
-#define Local_Port 36362
+#define Local_Port 43556
 
 void Command_task(int n) {
     json recvMessage;
+    json config;
+    readConfig(config);
+ 
+
+    
+
+
+
+
     /*
     //参数设定写入配置文件，并及时生效
     设定进入休眠
@@ -67,16 +76,21 @@ void Command_task(int n) {
         return ;
     }
 
+
+
+
     while(1){
         uint8_t buffer_recv[256] = {'\0'};
         socklen_t addr_len = sizeof(rev_addr);
-        std::cout << "hello thread!!!!! " <<std::endl;
+        std::cout << "Command_task initionlized,Waitting for command......... " <<std::endl;
 
         len = recvfrom(client_sockfd, buffer_recv, sizeof(buffer_recv), 0, (struct sockaddr*)&rev_addr, &addr_len);
         
         std::string Message(&buffer_recv[0],&buffer_recv[len]);
         
-        std::cout << "Revived form client:" << Message << std::endl;
+        std::cout << "Revived :" << Message << std::endl;
+        std::cout<< "From clinet" <<  inet_ntoa(rev_addr.sin_addr) <<std::endl;
+
 
         json jMessage = json::parse(Message);
 
@@ -85,17 +99,39 @@ void Command_task(int n) {
 
         }*/
         json jconfig;
+        json msg_return;
         bool config_flag = false;
 
-        if (jMessage.count("Command"))
+        if (jMessage.count("command"))
         {
-            if ("start" == jMessage["Command"].as_string())
+            if ("start" == jMessage["command"].as_string())
             {
                 std::cout << "start the tracking task" << std::endl;
             }
-            else if("idle" == jMessage["Command"].as_string())
+            else if("idle" == jMessage["command"].as_string())
             {      
                 std::cout << "stop the tracking task" << std::endl;
+            }
+            else if("hello" == jMessage["command"].as_string())
+            {
+                msg_return["command"] = "hello";
+                msg_return["message"] = "ok";
+                msg_return["content"]["gun_no"] = config["gun_SN"].as_string;
+                if(config["bind"].as_string == "true")
+                    msg_return["content"]["bind_device"] = config["bind"]["device_name"].as_string;;
+
+                std::string message_str = msg_return.dump();
+                strcpy(buf, message_str.c_str()); 
+                std::cout << message_str << std::endl;
+                
+                if ((len = sendto(client_sockfd, buf, strlen(buf), 0, (struct sockaddr*)&rev_addr, sizeof(struct sockaddr))) < 0)
+                {
+                    perror("socket error when send message");
+                    
+                    return 1;
+                }
+                break;
+
             }
         }
         //======Config========
