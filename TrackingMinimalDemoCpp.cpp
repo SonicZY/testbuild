@@ -114,11 +114,11 @@ static void setnonblocking(int sockfd) {
     }
 }
 
-    Dl_info dlinfo;
+std::string path;
 int maintask(int n){
 
 #if defined(__linux__)
-    std::string path = std::filesystem::path(dlinfo.dli_fname).parent_path();
+
     std::string libNameADN = path + "/libAntilatencyDeviceNetwork.so";
     std::string libNameTracking = path + "/libAntilatencyAltTracking.so";
     std::string libNameEnvironmentSelector = path + "/libAntilatencyAltEnvironmentSelector.so";
@@ -129,9 +129,12 @@ int maintask(int n){
 #endif
 
 
+    std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(1000));
 #if defined(__linux__)
     //json sendMessage;
     json sendMessage_gun;
+    //json config;
+    //readConfig(config);
 
     
 
@@ -141,16 +144,27 @@ int maintask(int n){
     struct sockaddr_in remote_addr; 
     struct sockaddr_in remote_addr_gun; 
     int sin_size;
-    char buf[BUFSIZ];  
+    char buf[BUFSIZ]; 
+    //char hostIp[50]; 
 
     memset(&remote_addr, 0, sizeof(remote_addr)); 
     remote_addr.sin_family = AF_INET;
     remote_addr.sin_addr.s_addr = inet_addr("192.168.1.223");
     remote_addr.sin_port = htons(1999); 
+    
+    
 
     memset(&remote_addr_gun, 0, sizeof(remote_addr_gun)); 
     remote_addr_gun.sin_family = AF_INET; 
-    remote_addr_gun.sin_addr.s_addr = inet_addr("192.168.1.169");
+    //remote_addr_gun.sin_addr.s_addr = inet_addr("192.168.1.60");
+    std::cout<<"MainTask....."<<std::endl;
+    std::string message_str = gconfig.dump();
+    strcpy(buf, message_str.c_str()); 
+    std::cout << message_str << std::endl;
+    
+    string str = gconfig["bind"]["hostIP"].as_string(); 
+    const char* hostIp = str.data();
+    remote_addr_gun.sin_addr.s_addr = inet_addr(hostIp);
     remote_addr_gun.sin_port = htons(1998); 
 
 
@@ -458,7 +472,20 @@ int maintask(int n){
                                 
                                 return 1;
                             }
-                        
+                        if (gRestart == true) 
+                        {
+                            string str = gconfig["bind"]["hostIP"].as_string(); 
+                            const char* hostIp = str.data();
+                            remote_addr_gun.sin_addr.s_addr = inet_addr(hostIp);
+                            std::cout << "Retarget hostIP......"<<std::endl;
+                            std::cout << ">>>"<<std::endl;
+                            std::cout << ">>>"<<std::endl;
+                            std::cout << ">>>"<<std::endl;
+                            std::cout << ">>>"<<std::endl;
+                            gRestart= false;
+                            std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(1000));
+                            //return 0;
+                        }
 
                         std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(10));
                     }
@@ -468,12 +495,7 @@ int maintask(int n){
                 }
         }
     }
-
-
-
-
-
-
+    return 0;
 }
 
 
@@ -483,48 +505,72 @@ int main(int argc, char* argv[]) {
    //     return 1;
    // }
 
-
+    Dl_info dlinfo;
+    
     dladdr(reinterpret_cast<void*>(&main), &dlinfo);
+    path = std::filesystem::path(dlinfo.dli_fname).parent_path();
+    
+    cout<<"Tracking initionlazing......."<<endl;
+    cout<<" "<<endl;
+    cout<<" "<<endl;
+    cout<<" "<<endl;
+    cout<<" "<<endl;
+    cout<<" "<<endl;
+    cout<<" "<<endl;
+    cout<<" "<<endl;
+    
+    std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(3000));
+
 //================creat a default config.json file=====================
-json my_config;
+    //json my_config;
 
- my_config["gun_SN"] = "001";
+     //my_config["gun_SN"] = "001";
 
- my_config["bind"] = "false";
- my_config["bind"]["hostIP"] = "192.168.1.223";
- my_config["bind"]["hostPort"] = 36369;
- my_config["bind"]["device_name"] = "oculus1";
- my_config["bind"]["player_name"] = "unknow";
+     //my_config["bind"]["enable"] = false;
+     //my_config["bind"]["hostIP"] = "192.168.1.223";
+     //my_config["bind"]["hostPort"] = 36369;
+     //my_config["bind"]["device_name"] = "oculus1";
+     //my_config["bind"]["player_name"] = "unknow";
 
- my_config["parameter"]["Enviroment"] = "0";
- my_config["parameter"]["Placement"] = "001";
- my_config["parameter"]["GunRotationOffset"] = "001";
- my_config["parameter"]["GunPositionOffset"] = "001";
- my_config["parameter"]["SetSPS"] = "001";
+     //my_config["parameter"]["Enviroment"] = "0";
+     //my_config["parameter"]["Placement"] = "001";
+     //my_config["parameter"]["GunRotationOffset"] = "001";
+     //my_config["parameter"]["GunPositionOffset"] = "001";
+     //my_config["parameter"]["SetSPS"] = "001";
 
- my_config["Vib"] = "001";
- my_config["VibMode"] = "001";
- my_config["Color"] = "001";
- my_config["BlinkMode"] = "001";
+     //my_config["Vib"] = "001";
+     //my_config["VibMode"] = "001";
+     //my_config["Color"] = "001";
+     //my_config["BlinkMode"] = "001";
 
 
-std::ofstream ofs("config.json");
-if(!ofs.is_open()){
-     std::cout<<"open file error"<<std::endl;
-}
-else
-{
-    ofs<<std::setw(4)<<my_config<<std::endl;
-}
+    //std::ofstream ofs("config.json");
+    //if(!ofs.is_open()){
+         //std::cout<<"open file error"<<std::endl;
+    //}
+    //else
+    //{
+        //ofs<<std::setw(4)<<my_config<<std::endl;
+        //ofs.close();
+    //}
 
-//================================================
-//开一个udp lisenter,is config changed,save to file and reboot
+    //================================================
+    //开一个udp lisenter,is config changed,save to file and reboot
 
-thread thread_command(Command_task,1);
-thread thread_main(maintask,1);
+    thread thread_command(Command_task,1);
+    thread thread_main(maintask,1);
+    thread_command.join();
+    
+    thread_main.join();
+    //char *argvl[] = {"ls","-al","/home/",NULL};
+    //char *envpl[] = {0,NULL};
+    //execve("/bin/ls",argvl,envpl);
+    
+    //char *argvl[] = {"1"};
+    //char *envpl[] = {"0","1","3"};
+    //execve("/bin/ls",argvl,envpl);
+    //execve("/home/pi/Propgun/testbuild/build/TrackingMinimalDemo",argvl,envpl);
+    
 
-thread_command.join();
-thread_main.join();
-
-return 0;
+    return 0;
 }

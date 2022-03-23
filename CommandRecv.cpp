@@ -4,10 +4,11 @@
 
 #define Local_Port 43556
 
+bool gRestart = false;
+json gconfig;
 void Command_task(int n) {
     json recvMessage;
-    json config;
-    readConfig(config);
+    readConfig(gconfig);
  
 
     
@@ -89,7 +90,7 @@ void Command_task(int n) {
         std::string Message(&buffer_recv[0],&buffer_recv[len]);
         
         std::cout << "Revived :" << Message << std::endl;
-        std::cout<< "From clinet" <<  inet_ntoa(rev_addr.sin_addr) <<std::endl;
+        std::cout<< "From clinet:" <<  inet_ntoa(rev_addr.sin_addr) <<std::endl;
 
 
         json jMessage = json::parse(Message);
@@ -116,9 +117,10 @@ void Command_task(int n) {
             {
                 msg_return["command"] = "hello";
                 msg_return["message"] = "ok";
-                msg_return["content"]["gun_no"] = config["gun_SN"].as_string;
-                if(config["bind"].as_string == "true")
-                    msg_return["content"]["bind_device"] = config["bind"]["device_name"].as_string;;
+                if(gconfig.count("gun_SN"))
+                    msg_return["content"]["gun_no"] = gconfig["gun_SN"].as_string();
+                //if(config["bind"]["enable"] == true)
+                msg_return["content"]["bind_device"] = gconfig["bind"]["device_name"].as_string();
 
                 std::string message_str = msg_return.dump();
                 strcpy(buf, message_str.c_str()); 
@@ -128,26 +130,41 @@ void Command_task(int n) {
                 {
                     perror("socket error when send message");
                     
-                    return 1;
+                    return;
                 }
-                break;
+            }
+            else if ("bind" == jMessage["command"].as_string())
+            {
+                if(jMessage.count("param"))
+                {
+                    gconfig["bind"]["enable"]        = true;
+                    gconfig["bind"]["device_name"]   = jMessage["param"]["device_name"].as_string();
+                    gconfig["bind"]["hostIP"]        = jMessage["param"]["ip_addr"].as_string();
+                    gconfig["bind"]["player_name"]   = jMessage["param"]["player_name"].as_string();
+                    gconfig["bind"]["team"]          = jMessage["param"]["team"];
+                    //===============Retrun command to app================
+                    msg_return["command"] = "bind";
+                    msg_return["message"] = "ok";
 
+                    std::string message_str = msg_return.dump();
+                    strcpy(buf, message_str.c_str()); 
+                    std::cout << message_str << std::endl;
+                    
+                    if ((len = sendto(client_sockfd, buf, strlen(buf), 0, (struct sockaddr*)&rev_addr, sizeof(struct sockaddr))) < 0)
+                    {
+                        perror("socket error when send message");
+                        
+                        return;
+                    }
+                    //=========write to config.json file============
+                    config_flag = true;
+                   
+                }
+                
             }
         }
         //======Config========
-        if (jMessage.count("TargetIP"))
-        {
-            std::cout << "Change the remoter host IP to :"<< jMessage["TargetIP"] << std::endl;
-            jconfig["TargetIP"] = jMessage["TargetIP"];
-            config_flag = true;
-        }
-
-        if (jMessage.count("TargetPort"))
-        {
-            std::cout << "Change the remoter host port to :"<< jMessage["TargetPort"] << std::endl;
-            jconfig["TargetPort"] = jMessage["TargetPort"];
-            config_flag = true;
-        }
+       
 
         if (jMessage.count("Enviroment"))
         {
@@ -207,19 +224,25 @@ void Command_task(int n) {
         }
         //save the palmeter to the config.json file
         if(config_flag){
-            std::ofstream ofs("config.json");
-            if(!ofs){
-                std::cout << "Can not write config.json,please check the file!!" << std::endl;
-                //return 0;
-            }
-            std::string config_str = jconfig.dump();
-            //ofs.write(config_str,config_str.length());
-            config_flag=false;
-            ofs.close();
-            std::cout << "Application rebooting,please wait some second!!" << std::endl;
-            std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(1000));
-            //execv("/TrackingMinmaDemoCPP");
 
+            std::string message_str = gconfig.dump();
+            strcpy(buf, message_str.c_str()); 
+            std::cout << message_str << std::endl;
+
+            std::ofstream ofs("config.json");
+            if(!ofs.is_open()){
+                std::cout<<"open file error"<<std::endl;
+            }
+            else
+            {
+                ofs<<std::setw(4)<<gconfig<<std::endl;
+                ofs.close();
+            }
+            
+            std::cout << "Application rebooting,please wait some second!!" << std::endl;
+            gRestart= true;
+            std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(1000));
+           
         }
         
         std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(400));
@@ -236,8 +259,10 @@ void Command_task(int n) {
 
 int readConfig(json& j){
     
+    char buf[BUFSIZ];  
+    
     std::ifstream ifs("config.json");
-    std::cout << "step 2" << std::endl;
+    //std::cout << "step 2" << std::endl;
     
 
     if(!ifs){
@@ -245,10 +270,14 @@ int readConfig(json& j){
         return 0;
     }
 
-    json jMessage;
+    //json jMessage;
     
-    ifs >> jMessage;
+    ifs >> j;
     ifs.close();
+
+    std::string message_str = j.dump();
+    strcpy(buf, message_str.c_str()); 
+    std::cout << message_str << std::endl;
     /*
     if (jMessage.count("TargetIP"))
     {
@@ -307,7 +336,6 @@ int readConfig(json& j){
         return 0;
     }*/
     
-    j = jMessage;
     
     return 1;
 

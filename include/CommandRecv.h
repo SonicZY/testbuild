@@ -29,3 +29,5 @@ using namespace configor;
 
 void Command_task(int n);
 int readConfig(json& j);
+extern bool gRestart;
+extern json gconfig;
