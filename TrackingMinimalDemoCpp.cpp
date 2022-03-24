@@ -262,7 +262,8 @@ int maintask(int n){
      const std::string environmentData = "AAVSaWdpZMoDAQZ5ZWxsb3ckFbhTiT_cRqA-r45jvZqZmT4AAAAAAAAAAACamRk_iwEeDQMGFAAKFAAOFAASFAADFAIZFAAdFAAhFAAjEQEbBgIjCQEjBQEdAAIDAQICAAIJAAAHBAINAAIRAAIZAwIZAAIgAAAhBwMABgEeCgIADgEAEgEWFAIHEwAEEwIREwAXEwAbEwAfEwAMEwIJEgALEAENEQEQEgAFEgIZEQEWEgIfEgAcEgIiEgMCEAEIEAEEDwEEAgIAAwMCBAEaCwMCBwEGDQIACwMeAQIBDAMDDQIBCAMKBwMEBAEBBAMGAAIHAQAKAQAHAgIJAwMKBAAFCwIOAQEBEQMeAgIIDAMgAwAfBQAGBgIjAgMbAwMPBQIXAgIYBQAVAAIVAQASAQAiCAMWBQEUAwMUBwEVCgARCwMTDgIODQMQDQEGEAMHCAIECAMIBwMHCgIDCgIRBgMcEAIJDgEMBgAMCAAKCgMMAwMUBQIPBwASCAENCgIKDQMMDQEODwEQAgEgEAAeEAEcDgAaDgMgDAAhCwAgCgAiDgMcCwEcCAAfBwEdBQMZCAATDAMYCwMVDQMXCAIXDQEYDwEVEAAREAITEAEPCgMjDgOfQA";
     
       const std::string placementData = "AAAAAAAK1yO8BoGVPcK4sj0AAAAAAAAAAGY0";
-      const std::string placementData_gun = "AAAAAADNzMw9m15wPsFX4D8AAAAA2w9JQA";
+      //const std::string placementData_gun = "AAAAAADNzMw9m15wPsFX4D8AAAAA2w9JQA";//gun down
+      const std::string placementData_gun = "AAAAAADNzMw9zcxMPhhQ_D1FrAg02g9JwA";//gun front
     // Create environment object from the serialized data.
     const Antilatency::Alt::Environment::IEnvironment environment = environmentSelectorLibrary.createEnvironment(environmentData);
     if (environment == nullptr) {
