@@ -1,0 +1,24 @@
+{
+    "AutoSleep": 1,
+    "BlinkMode": "001",
+    "Color": "001",
+    "FPS": 10,
+    "Vib": "001",
+    "VibMode": "001",
+    "bind": {
+        "device_name": "John",
+        "enable": true,
+        "hostIP": "192.168.1.60",
+        "hostPort": 36369,
+        "player_name": "玩家",
+        "team": 1
+    },
+    "gun_SN": "15",
+    "parameter": {
+        "Enviroment": "0",
+        "GunPositionOffset": "001",
+        "GunRotationOffset": "001",
+        "Placement": "001",
+        "SetSPS": 50
+    }
+}
