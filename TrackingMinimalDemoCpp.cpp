@@ -130,13 +130,20 @@ int maintask(int n){
 
 
     std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(1000));
+
 #if defined(__linux__)
     //json sendMessage;
     json sendMessage_gun;
-    //json config;
-    //readConfig(config);
 
-    
+    //read configration
+    long sleepTick = gconfig["AutoSleep"]*60*1000;
+    long sleepTimer = sleepTick;
+
+    string str = gconfig["bind"]["hostIP"].as_string();
+
+    int fps = gconfig["FPS"];
+    int fps_temp = fps;
+
 
     //init the socket
     int client_sockfd, ret, on;
@@ -158,11 +165,7 @@ int maintask(int n){
     remote_addr_gun.sin_family = AF_INET; 
     //remote_addr_gun.sin_addr.s_addr = inet_addr("192.168.1.60");
     std::cout<<"MainTask....."<<std::endl;
-    std::string message_str = gconfig.dump();
-    strcpy(buf, message_str.c_str()); 
-    std::cout << message_str << std::endl;
-    
-    string str = gconfig["bind"]["hostIP"].as_string(); 
+     
     const char* hostIp = str.data();
     remote_addr_gun.sin_addr.s_addr = inet_addr(hostIp);
     remote_addr_gun.sin_port = htons(1998); 
@@ -430,6 +433,13 @@ int maintask(int n){
                             std::cout << "\t\tStage: " << static_cast<int32_t>(state.stability.stage) << std::endl;
                             std::cout << "\t\tValue: " << state.stability.value << std::endl;
 
+                            //for long time no movement,then into sleep mode to save power and reduce network use
+                            if(state.localAngularVelocity.x < 0.007){
+                                sleepTick -= 10;     
+                            }else{
+                                sleepTick = sleepTimer;
+                            }
+
                             //std::cout << "\tVelocity:" << state.velocity.x << ", y: " << state.velocity.y << ", z: " << state.velocity.z << std::endl;
 
                             //std::cout << "\tLocalAngularVelocity: x:" << state.localAngularVelocity.x << ", y: " << state.localAngularVelocity.y << ", z: " << state.localAngularVelocity.z << std::endl << std::endl;
@@ -457,22 +467,15 @@ int maintask(int n){
                             sendMessage["Gun"]["Pin"]["S"] = (pinState_Switch == 0)? "ON":"OFF";
                             sendMessage["Gun"]["Pin"]["R"] = (pinState_Reload == 0)? "ON":"OFF";
                             sendMessage["Gun"]["Pin"]["F1"] = (pinState_F1 == 0)? "ON":"OFF";
-                            sendMessage["Gun"]["Pin"]["F2"] = (pinState_F2 == 0)? "ON":"OFF";
-
+                            sendMessage["Gun"]["Pin"]["F2"] = (pinState_F2 == 0)? "ON":"OFF";                
 #endif
                         }
                         
                         std::string message_str = sendMessage.dump();
-                            strcpy(buf, message_str.c_str()); 
+                        strcpy(buf, message_str.c_str()); 
+                        std::cout << message_str << std::endl;
 
-                            std::cout << message_str << std::endl;
-                          
-                            if ((len = sendto(client_sockfd, buf, strlen(buf), 0, (struct sockaddr*)&remote_addr_gun, sizeof(struct sockaddr))) < 0)
-                            {
-                                perror("socket error when send message");
-                                
-                                return 1;
-                            }
+                       //for configration changed
                         if (gRestart == true) 
                         {
                             string str = gconfig["bind"]["hostIP"].as_string(); 
@@ -483,12 +486,27 @@ int maintask(int n){
                             std::cout << ">>>"<<std::endl;
                             std::cout << ">>>"<<std::endl;
                             std::cout << ">>>"<<std::endl;
+                            //add other configration here==========//
+
+                            //=========================================
                             gRestart= false;
                             std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(1000));
                             //return 0;
                         }
 
-                        std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(10));
+                        if (sleepTick>200){
+                            if ((len = sendto(client_sockfd, buf, strlen(buf), 0, (struct sockaddr*)&remote_addr_gun, sizeof(struct sockaddr))) < 0)
+                            {
+                                perror("socket error when send message");
+                                
+                                return 1;
+                            }
+                            std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(fps));
+                        }
+                        else{
+                            std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(500));
+                        }
+                       
                     }
                 }
                 else {
@@ -520,7 +538,7 @@ int main(int argc, char* argv[]) {
     cout<<" "<<endl;
     cout<<" "<<endl;
     
-    std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(3000));
+    std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(1000));
 
 //================creat a default config.json file=====================
     //json my_config;
@@ -543,6 +561,9 @@ int main(int argc, char* argv[]) {
      //my_config["VibMode"] = "001";
      //my_config["Color"] = "001";
      //my_config["BlinkMode"] = "001";
+     
+     //my_config["AutoSleep"] = 2;
+     //my_config["FPS"] = 10; // 10ms
 
 
     //std::ofstream ofs("config.json");

@@ -17,13 +17,13 @@ void Command_task(int n) {
 
 
     /*
-    //参数设定写入配置文件，并及时生效
+    //参数设定写入配置文件，并及时生效 ok
     设定进入休眠
     设定进入工作模式
     设置定时休眠
     查询电量
     设置placement？enviroment？
-    设置目标客户端ip
+    设置目标客户端ip 
     设置帧率，默认70帧
 
     GPIO相关：
@@ -32,9 +32,7 @@ void Command_task(int n) {
     设置振动开关，强弱、模式
     */
 
-    //头和gun可以不用一个placement么??
-
-
+  
     //init the socket
     int client_sockfd, ret, on;
     int len;
@@ -249,13 +247,6 @@ void Command_task(int n) {
     }
 }
 
-/*
-1\先做读取json文件测试
-2、做保存接送文件测试
-3、做发送命令测试
-4、做重启程序测试
-
-*/
 
 int readConfig(json& j){
     
