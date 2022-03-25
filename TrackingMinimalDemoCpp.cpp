@@ -136,7 +136,8 @@ int maintask(int n){
     json sendMessage_gun;
 
     //read configration
-    long sleepTick = gconfig["AutoSleep"]*60*1000;
+    long sleepTick = gconfig["AutoSleep"];
+    sleepTick = sleepTick*60*1000;//min shift to ms
     long sleepTimer = sleepTick;
 
     string str = gconfig["bind"]["hostIP"].as_string();
