@@ -505,7 +505,7 @@ int maintask(int n){
                             std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(fps));
                         }
                         else{
-                            std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(500));
+                            std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(100));
                         }
                        
                     }
