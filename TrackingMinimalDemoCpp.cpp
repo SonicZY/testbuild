@@ -267,7 +267,7 @@ int maintask(int n){
     
       const std::string placementData = "AAAAAAAK1yO8BoGVPcK4sj0AAAAAAAAAAGY0";
       //const std::string placementData_gun = "AAAAAADNzMw9m15wPsFX4D8AAAAA2w9JQA";//gun down
-      const std::string placementData_gun = "AAAAAACxsLA9zcxMPho8PT8F7i801g9JQA";//gun front
+      const std::string placementData_gun = "AAAAAADNzMw9zcxMPpiUJT8QlqUx0w9JwA";//gun front
     // Create environment object from the serialized data.
     const Antilatency::Alt::Environment::IEnvironment environment = environmentSelectorLibrary.createEnvironment(environmentData);
     if (environment == nullptr) {
